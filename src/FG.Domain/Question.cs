@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace FG.Domain
+﻿namespace FG.Domain
 {
     public class Question
     {
-
+        public QuestionTypeEnum Type { get; set; }
+        
         public string Description { get; set; }
 
-        public QuestionTypeEnum MyProperty { get; set; }
+        public Question NextQuestionYes { get; set; }
+
+        public Question NextQuestionNo { get; set; }
     }
 }

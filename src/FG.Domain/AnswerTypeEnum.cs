@@ -4,11 +4,9 @@ using System.Text;
 
 namespace FG.Domain
 {
-    public enum QuestionTypeEnum
+    public enum AnswerTypeEnum
     {
-        Food,
-        Adjective,
-        Answer,
-        Comparative
+        Yes = 'S',
+        No = 'N'
     }
 }
