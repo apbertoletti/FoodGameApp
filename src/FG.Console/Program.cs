@@ -1,6 +1,6 @@
-﻿using FG.Domain;
+﻿using FG.Domain.Enums;
+using FG.Domain.Services;
 using System;
-using System.Collections.Generic;
 
 namespace FG.ConsoleApp
 {
@@ -8,26 +8,33 @@ namespace FG.ConsoleApp
     {
         static void Main(string[] args)
         {
-            Console.Clear();
-            Console.WriteLine("Pense num prato que voce gosta!");
-            Console.WriteLine("(pressione ENTER após pensar)");
-            Console.ReadKey();
-
             var menu = new Menu();
-            var actualQuestion = menu.FirstQuestion;
+            var actualQuestion = menu.InitialQuestion;
 
             while (true)
-            {
+            {               
                 switch (actualQuestion.Type)
                 {
+                    case QuestionTypeEnum.Initial:
+                        {
+                            Console.Clear();
+                            Console.WriteLine("Pense num prato que voce gosta!");
+                            Console.WriteLine("(pressione ENTER após pensar)");
+                            Console.ReadKey();
+                            
+                            actualQuestion = menu.NextQuestion(actualQuestion, AnswerTypeEnum.Yes);
+                            
+                            break;
+                        }
+
                     case QuestionTypeEnum.Adjective:
                         {
                             Console.Clear();
                             Console.WriteLine($"O prato que você pensou é {actualQuestion.Description}?");
-                            Console.Write("Digite 'S' ou 'N': ");
-                            var tecla = Console.ReadKey();
-                            
-                            actualQuestion = menu.NextQuestion(actualQuestion, (AnswerTypeEnum)tecla.Key);
+                            Console.WriteLine("Digite 'S' ou 'N': ");
+                            var answerType = GetAnswer();
+
+                            actualQuestion = menu.NextQuestion(actualQuestion, answerType);
 
                             break;
                         }
@@ -36,37 +43,53 @@ namespace FG.ConsoleApp
                         {
                             Console.Clear();
                             Console.WriteLine($"O prato que você pensou é {actualQuestion.Description}?");
-                            Console.Write("Digite 'S' ou 'N': ");
-                            var tecla = Console.ReadKey();
-                            
-                            actualQuestion = menu.NextQuestion(actualQuestion, (AnswerTypeEnum)tecla.Key);
+                            Console.WriteLine("Digite 'S' ou 'N': ");
+                            var answerType = GetAnswer();
+
+                            actualQuestion = menu.NextQuestion(actualQuestion, answerType);
 
                             if (actualQuestion is null)
                             {
                                 Console.Clear();
                                 Console.WriteLine("Acertei de novo!");
                                 Console.ReadKey();
+                                actualQuestion = menu.InitialQuestion;
                             }
+
+                            break;
+                        }
+
+                    case QuestionTypeEnum.AskUser:
+                        {
+                            Console.Clear();
+                            Console.WriteLine($"Qual é o prato que você pensou?");
+                            Console.WriteLine("(digite e tecle ENTER)");
+                            var foodNameChoosed = Console.ReadLine();
+
+                            Console.Clear();
+                            Console.WriteLine($"{foodNameChoosed} é ________ mas {menu.GetPreviousFoodDescription(actualQuestion)} não.");
+                            Console.WriteLine("(digite e tecle ENTER)");
+                            var foodAdjectiveChoosed = Console.ReadLine();
+
+                            actualQuestion = menu.AddQuestion(actualQuestion, foodNameChoosed, foodAdjectiveChoosed);
 
                             break;
                         }
                 }    
             }
+        }
 
-            //if (question.Food is null)
-            //{
-            //    Console.WriteLine($"O prato que você pensou é {question.Adjective}?");
-            //    Console.Write("Digite 'S' ou 'N': ");
-            //    var tecla = Console.ReadKey();
-                
-            //    var nextQuestion = menu.Answer(question, (AnswerTypeEnum)tecla.Key.ToString(), )
-            //    if (tecla.Key == ConsoleKey.S)
-            //    {
-            //        Console.Clear();
-            //        Console.WriteLine("o seu )
-            //    }
+        private static AnswerTypeEnum GetAnswer()
+        {
+            while (true)
+            {
+                var keyPressed = Console.ReadKey(true);
+                if (keyPressed.Key == ConsoleKey.S)
+                    return AnswerTypeEnum.Yes;
 
-            //}
+                if (keyPressed.Key == ConsoleKey.N)
+                    return AnswerTypeEnum.No;
+            }
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace FG.Domain
+﻿using FG.Domain.Enums;
+
+namespace FG.Domain.Entities
 {
     public class Question
     {
@@ -9,5 +11,7 @@
         public Question NextQuestionYes { get; set; }
 
         public Question NextQuestionNo { get; set; }
+
+        public Question PreviousQuestion { get; set; }
     }
 }
