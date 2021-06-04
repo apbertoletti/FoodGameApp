@@ -16,14 +16,15 @@ namespace FG.Domain.Services
             {
                 Type = QuestionTypeEnum.Initial
             };
-                      
-            var firstQuestion = new Question 
+
+            var firstQuestion = new Question
             {
                 Type = QuestionTypeEnum.Adjective,
-                Description = "Massa"               
+                Description = "Massa"
             };
 
             InitialQuestion.NextQuestionYes = firstQuestion;
+            firstQuestion.PreviousQuestion = InitialQuestion;
 
             var firstYesQuestion = new Question
             {
@@ -32,6 +33,7 @@ namespace FG.Domain.Services
             };
 
             firstQuestion.NextQuestionYes = firstYesQuestion;
+            firstYesQuestion.PreviousQuestion = firstQuestion;
 
             var firstNoQuestion = new Question
             {
@@ -40,6 +42,7 @@ namespace FG.Domain.Services
             };
 
             firstQuestion.NextQuestionNo = firstNoQuestion;
+            firstNoQuestion.PreviousQuestion = firstQuestion;
         }
 
         public Question NextQuestion(Question question, AnswerTypeEnum answerType)
