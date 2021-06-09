@@ -1,51 +1,23 @@
 ﻿using FG.Domain.Entities;
 using FG.Domain.Enums;
-using System.Collections.Generic;
+using FG.Domain.Interfaces.Services;
 
 namespace FG.Domain.Services
 {
-    public class Menu
+    public class MenuService : IMenuService
     {
-        public List<Question> Questions;
-        
-        public Question InitialQuestion { get; set; }
+        private IQuestionService _questionService;
 
-        public Menu()
+        public Question InitialQuestion { get; private set; }
+
+        public MenuService(IQuestionService questionService)
         {
-            InitialQuestion = new Question
-            {
-                Type = QuestionTypeEnum.Initial
-            };
+            _questionService = questionService;
 
-            var firstQuestion = new Question
-            {
-                Type = QuestionTypeEnum.Adjective,
-                Description = "Massa"
-            };
-
-            InitialQuestion.NextQuestionYes = firstQuestion;
-            firstQuestion.PreviousQuestion = InitialQuestion;
-
-            var firstYesQuestion = new Question
-            {
-                Type = QuestionTypeEnum.Food,
-                Description = "Lasanha",
-            };
-
-            firstQuestion.NextQuestionYes = firstYesQuestion;
-            firstYesQuestion.PreviousQuestion = firstQuestion;
-
-            var firstNoQuestion = new Question
-            {
-                Type = QuestionTypeEnum.Food,
-                Description = "Bolo de chocolate",                
-            };
-
-            firstQuestion.NextQuestionNo = firstNoQuestion;
-            firstNoQuestion.PreviousQuestion = firstQuestion;
+            InitialQuestion = _questionService.GetInitialQuestion();
         }
 
-        public Question NextQuestion(Question question, AnswerTypeEnum answerType)
+        public Question GetNextQuestion(Question question, AnswerTypeEnum answerType)
         {
             if (answerType == AnswerTypeEnum.No)
             {

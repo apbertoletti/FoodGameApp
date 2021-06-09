@@ -1,11 +1,12 @@
-﻿using FG.Domain.Enums;
+﻿using FG.Domain.Entities.Base;
+using FG.Domain.Enums;
 
 namespace FG.Domain.Entities
 {
-    public class Question
+    public class Question : Entity<Question>
     {
         public QuestionTypeEnum Type { get; set; }
-        
+
         public string Description { get; set; }
 
         public Question NextQuestionYes { get; set; }

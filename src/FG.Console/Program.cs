@@ -8,11 +8,12 @@ namespace FG.ConsoleApp
     {
         static void Main(string[] args)
         {
-            var menu = new Menu();
-            var actualQuestion = menu.InitialQuestion;
+            var questionService = new QuestionService();
+            var menuService = new MenuService(questionService);
+            var actualQuestion = menuService.InitialQuestion;
 
             while (true)
-            {               
+            {
                 switch (actualQuestion.Type)
                 {
                     case QuestionTypeEnum.Initial:
@@ -21,9 +22,9 @@ namespace FG.ConsoleApp
                             Console.WriteLine("Pense num prato que voce gosta!");
                             Console.WriteLine("(pressione ENTER após pensar)");
                             Console.ReadKey();
-                            
-                            actualQuestion = menu.NextQuestion(actualQuestion, AnswerTypeEnum.Yes);
-                            
+
+                            actualQuestion = menuService.GetNextQuestion(actualQuestion, AnswerTypeEnum.Yes);
+
                             break;
                         }
 
@@ -34,7 +35,7 @@ namespace FG.ConsoleApp
                             Console.WriteLine("Digite 'S' ou 'N': ");
                             var answerType = GetAnswer();
 
-                            actualQuestion = menu.NextQuestion(actualQuestion, answerType);
+                            actualQuestion = menuService.GetNextQuestion(actualQuestion, answerType);
 
                             break;
                         }
@@ -46,14 +47,14 @@ namespace FG.ConsoleApp
                             Console.WriteLine("Digite 'S' ou 'N': ");
                             var answerType = GetAnswer();
 
-                            actualQuestion = menu.NextQuestion(actualQuestion, answerType);
+                            actualQuestion = menuService.GetNextQuestion(actualQuestion, answerType);
 
                             if (actualQuestion is null)
                             {
                                 Console.Clear();
                                 Console.WriteLine("Acertei de novo!");
                                 Console.ReadKey();
-                                actualQuestion = menu.InitialQuestion;
+                                actualQuestion = menuService.InitialQuestion;
                             }
 
                             break;
@@ -67,15 +68,15 @@ namespace FG.ConsoleApp
                             var foodNameChoosed = Console.ReadLine();
 
                             Console.Clear();
-                            Console.WriteLine($"{foodNameChoosed} é ________ mas {menu.GetPreviousFoodDescription(actualQuestion)} não.");
+                            Console.WriteLine($"{foodNameChoosed} é ________ mas {menuService.GetPreviousFoodDescription(actualQuestion)} não.");
                             Console.WriteLine("(digite e tecle ENTER)");
                             var foodAdjectiveChoosed = Console.ReadLine();
 
-                            actualQuestion = menu.AddQuestion(actualQuestion, foodNameChoosed, foodAdjectiveChoosed);
+                            actualQuestion = menuService.AddQuestion(actualQuestion, foodNameChoosed, foodAdjectiveChoosed);
 
                             break;
                         }
-                }    
+                }
             }
         }
 
